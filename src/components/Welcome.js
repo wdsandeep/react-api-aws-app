@@ -1,12 +1,33 @@
-import React from "react";
-import welcomeGalleryData from "./data/welcome_gallery.json";
+import React, { useState, useEffect } from "react";
+// import welcomeGalleryData from "./data/welcome_gallery.json";
 function Welcome() {
+  const [welcomeGalleryData, setWelcomeGalleryData] = useState([]);
+
+  const getGalleryImages = async () => {
+    const respImages = await fetch(
+      "https://mf7llnmppf.execute-api.us-east-1.amazonaws.com/Production/gallery_images"
+    );
+    const jsonImages = await respImages.json();
+    // console.log(jsonImages);
+    setWelcomeGalleryData(jsonImages);
+  };
+
+  useEffect(() => {
+    // call gallery data function
+    getGalleryImages();
+  }, []);
+
   return (
     <div className="scene" id="welcome">
       <article className="content">
         <div className="gallery">
           {welcomeGalleryData.map((item) => (
-            <img src={item.src} alt={item.alt} className={item.class} />
+            <img
+              key={Math.random()}
+              src={item.src}
+              alt={item.alt}
+              className={item.class}
+            />
           ))}
         </div>
         <h1>Welcome to the Landon&nbsp;Hotel</h1>

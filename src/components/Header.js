@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import menuLinksData from "./data/menu_links.json";
+// import menuLinksData from "./data/menu_links.json";
 // const menuLinksData = require("./data/menu_links.json");
 
 const Header = () => {
+  const [menuLinksData, setMenuLinksData] = useState([]);
+
+  const loadMenuLinksData = async () => {
+    // Query the API Gateway
+    const resp = await fetch(
+      "https://mf7llnmppf.execute-api.us-east-1.amazonaws.com/Production/menu_links"
+    );
+    const jsonData = await resp.json();
+    // console.log(jsonData);
+    // Assign response data to state variable
+    setMenuLinksData(jsonData);
+  };
+  useEffect(() => {
+    // Load the menu links data from the api gateway
+    loadMenuLinksData();
+
+    // Other side effects
+  }, []);
+
   return (
     <header id="intro">
       <article className="fullheight">
@@ -30,7 +49,7 @@ const Header = () => {
           </div>
           <ul>
             {menuLinksData.map((link) => (
-              <li>
+              <li key={Math.random()}>
                 <a className={`icon ${link.class}`} href={link.href}>
                   <span>{link.text}</span>
                 </a>

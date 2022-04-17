@@ -1,7 +1,33 @@
-import React from "react";
-import hotelAmenitiesData from "./data/amenities.json";
-import hotelServicesData from "./data/services.json";
+import React, { useState, useEffect } from "react";
+// import hotelAmenitiesData from "./data/accessibilities.json";
+// import hotelServicesData from "./data/services.json";
 function HotelInfo() {
+  const [hotelAmenitiesData, setHotelAmenitiesData] = useState([]);
+  const [hotelServicesData, setHotelServicesData] = useState([]);
+
+  const getHotelAmenities = async () => {
+    const respAmenities = await fetch(
+      "https://mf7llnmppf.execute-api.us-east-1.amazonaws.com/Production/accessibilities"
+    );
+    const jsonAmenities = await respAmenities.json();
+    // console.log(jsonAmenities);
+    setHotelAmenitiesData(jsonAmenities);
+  };
+
+  const getHotelServices = async () => {
+    const respServices = await fetch(
+      "https://mf7llnmppf.execute-api.us-east-1.amazonaws.com/Production/services"
+    );
+    const jsonServices = await respServices.json();
+    setHotelServicesData(jsonServices);
+  };
+
+  useEffect(() => {
+    // Call Hotel Amenities Function
+    getHotelAmenities();
+    // Call Hotel Services Function
+    getHotelServices();
+  }, []);
   return (
     <div className="scene" id="hotelinfo">
       <article className="heading">
@@ -45,7 +71,7 @@ function HotelInfo() {
           </p>
           <ul>
             {hotelServicesData.map((item) => (
-              <li>{item.name}</li>
+              <li key={Math.random()}>{item.name}</li>
             ))}
           </ul>
         </section>
@@ -58,7 +84,7 @@ function HotelInfo() {
           </p>
           <ul>
             {hotelAmenitiesData.map((item) => (
-              <li>{item.name}</li>
+              <li key={Math.random()}>{item.name}</li>
             ))}
           </ul>
         </section>
